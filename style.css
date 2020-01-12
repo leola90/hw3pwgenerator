@@ -1,0 +1,23 @@
+.content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: lightgrey;
+    padding: 20px;
+    width: 100%;
+}
+
+#display {
+    width: 100%;
+}
+
+h4 {
+    text-align: center;
+}
+
+input[type=text] {
+    height:200px;
+}
+
+.btn-lg {
+    background-color: red;
+}
