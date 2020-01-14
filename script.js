@@ -1,71 +1,111 @@
-// Prompt Questions for user to input values
-var userInputLength = confirm("Please use the slider to select the length");
-var specialChar = confirm("Do you want to include Special Characters?");
-var numericalChar = confirm("Do you want to include Numerical values?");
-var lowerChar = confirm("Do you want to include Lowercase letters?");
-var upperChar = confirm("Do you want to include Uppercase letters?");
-var userInput = 0;
+window.addEventListener('load', function() {
 
-// Conditional statements
-if (specialChar === true) {
-    userInput++;
-    alert ("You've selected to use Special Characters: " + specialChar);
-}
-else {
-    alert("You've selected NOT to use Special Characters: " + specialChar);
-}
-
-if (numericalChar === true) {
-    userInput++;
-    alert ("You've selected to use Numerical Values: " + numericalChar);
-}
-else {
-    alert("You've selected NOT to use Numerical Values: " + numericalChar);
-}
-
-if (lowerChar === true) {
-    userInput++
-    alert ("You've selected to use Lowercase letters: " + lowerChar);
-}
-else {
-    alert("You've selected NOT to use Lowercase letters: " + lowerChar);
-}
-if (upperChar === true) {
-    userInput++;
-    alert ("You've selected to use Uppercase letters: " + upperChar);
-}
-else {
-    alert("You've selected NOT to use Uppercase letters: " + upperChar);
-}
-
-
-function generate(){
-    let complexity = document.getElementById("slider").value;
-    let values = "#$%&'()*+,-./:;<=>?@[\]^_`{|}~0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // Prompt Questions for user to input values
+    var inputLength = prompt("Please enter a number for length(must between 8-128 characters)");
     
-    let password = "";
-    for (var i = 0; i <= complexity; i++){
-        password = password + values.charAt(Math.floor(Math.random() * Math.floor(values.length - 1)));
+    // Validate user input 
+    while (inputLength < 8 || inputLength > 128) {
+        inputLength = prompt("Length must be between 8-128 characters");
+    }
+    
+    // Setting Variables
+    var specialChar = confirm("Do you want to include Special Characters?");
+    var numericalChar = confirm("Do you want to include Numerical values?");
+    var lowerChar = confirm("Do you want to include Lowercase letters?");
+    var upperChar = confirm("Do you want to include Uppercase letters?");
+
+    // Adding conditional statements
+    if (specialChar === true) {
+        alert ("You've selected to use Special Characters: " + specialChar);
+    }
+    else {
+        alert("You've selected NOT to use Special Characters: " + specialChar);
+    }
+    
+    if (numericalChar === true) {
+        alert ("You've selected to use Numerical Values: " + numericalChar);
+    }
+    else {
+        alert("You've selected NOT to use Numerical Values: " + numericalChar);
+    }
+    
+    if (lowerChar === true) {
+        alert ("You've selected to use Lowercase letters: " + lowerChar);
+    }
+    else {
+        alert("You've selected NOT to use Lowercase letters: " + lowerChar);
+    }
+    if (upperChar === true) {
+        alert ("You've selected to use Uppercase letters: " + upperChar);
+    }
+    else {
+        alert("You've selected NOT to use Uppercase letters: " + upperChar);
     }
 
-    document.getElementById("display").value = password;
-
-    document.getElementById("slider").oninput = function(){
-        if(document.getElementById("slider").value >0){
-            document.getElementById("length").innerHTML = "Length: " + document.getElementById("slider").value;      
-        }
-        else {
-            document.getElementById("length").innerHTML = "Length: 1";
-        }
+    //DOM elements and appending it 
+    var result = document.getElementById('password');
+  
+    document.getElementById('generate').addEventListener('click', () => {
+      result.value = generatePassword(specialChar, numericalChar, lowerChar, upperChar, inputLength);
+    });
+  
+    document.getElementById('clipboard').addEventListener('click', () => {
+      var textarea = document.createElement('textarea');
+      var password = result.value;
+  
+      if (!password) {
+        return;
+      }
+  
+      textarea.value = password;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      alert('Password copied to clipboard');
+    });
+  });
+  
+  //Generate randomFunctions
+  var randomFunc = {
+    special: getRandomSpecial,
+    numerical: getRandomNumber,
+    lower: getRandomLower,
+    upper: getRandomUpper
+  };
+  
+  // Call for a function for when generate password is selected
+  function generatePassword(lower, upper, special, numerical, length) {
+    let generatedPassword = '';
+    const typesCount = lower + upper + special + numerical;
+    const typesArr = [{special}, {numerical}, {lower}, {upper}].filter(item => Object.values(item)[0]);
+  
+    // create a loop
+    for (let i = 0; i < length; i += typesCount) {
+      typesArr.forEach(type => {
+        var funcName = Object.keys(type)[0];
+        generatedPassword += randomFunc[funcName]();
+      });
     }
-
-}
-
-function copyPassword(){
-    document.getElementById("display").select();
-    document.execCommand("Copy");
-    alert("Password copied to clipboard");
-}
-
-document.getElementById("length").innerHTML = "Length: 25";
-
+  
+    var finalPassword = generatedPassword.slice(0, length);
+  
+    return finalPassword;
+  }
+  
+  // added rando for random functions
+  function getRandomLower() {
+    return rando("qwertyuiopasdfghjklzxcvbnm")
+  }
+  
+  function getRandomUpper() {
+    return rando("QWERTYUIOPASDFGHJKLZXCVBNM");
+  }
+  
+  function getRandomNumber() {
+    return rando(9);
+  }
+  
+  function getRandomSpecial() {
+    return rando("!@#$%^&*(){}[]=<>/,.;");
+  }
