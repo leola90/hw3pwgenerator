@@ -41,7 +41,7 @@ window.addEventListener('load', function() {
     else {
         alert("You've selected NOT to use Uppercase letters: " + upperChar);
     }
-
+  
     //DOM elements and appending it 
     var result = document.getElementById('password');
   
@@ -75,9 +75,9 @@ window.addEventListener('load', function() {
   };
   
   // Call for a function for when generate password is selected
-  function generatePassword(lower, upper, special, numerical, length) {
+  function generatePassword(special, numerical, lower, upper, length) {
     let generatedPassword = '';
-    const typesCount = lower + upper + special + numerical;
+    const typesCount =  special + numerical + lower + upper;
     const typesArr = [{special}, {numerical}, {lower}, {upper}].filter(item => Object.values(item)[0]);
   
     // create a loop
